@@ -157,3 +157,18 @@ export const getFlippableValuesFromMatrix = (matchValue = 0, rowIndex, columnInd
       ];
     }, []);
 };
+
+export const getMatrixValueList = (matrix = []) => {
+  return matrix
+    .reduce((acc, row = [], r) => {
+      row.forEach((value, c) => {
+        acc.push({
+          value,
+          row: r,
+          column: c
+        });
+      });
+
+      return acc;
+    }, []);
+};
