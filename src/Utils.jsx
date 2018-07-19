@@ -1,30 +1,34 @@
-const rows = 8;
-const columns = 8;
-const matrix = [
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 2, 0, 0, 0],
-  [0, 0, 0, 2, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0]
-];
+export const getHorizontal = (matrix = [], rowIndex, columnIndex) => {
+  return {
+    values: matrix[rowIndex]
+      .map((value, index) => {
+        return {
+          value,
+          row: rowIndex,
+          column: index
+        };
+      }),
+    currentIndex: columnIndex
+  };
+};
 
-function getRow(matrix = [], rowIndex) {
-  return matrix[rowIndex];
-}
+export const getVertical = (matrix = [], rowIndex, columnIndex) => {
+  return {
+    values: matrix
+      .reduce((acc, row = [], index) => {
+        acc.push({
+          value: row[columnIndex],
+          row: index,
+          column: columnIndex
+        });
 
-function getColumn(matrix = [], columnIndex) {
-  return matrix
-    .reduce((acc, row = []) => {
-      acc.push(row[columnIndex]);
+        return acc;
+      }, []),
+    currentIndex: rowIndex
+  };
+};
 
-      return acc;
-    }, []);
-}
-
-function getDownSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOfColumns) {
+export const getDownSlant = (matrix = [], rowIndex, columnIndex, numberOfRows, numberOfColumns) => {
   const firstRowIndex = rowIndex - columnIndex;
   const firstColumnIndex = columnIndex - rowIndex;
   const values = [];
@@ -35,7 +39,11 @@ function getDownSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOf
     currentIndex = 0;
 
   while (r < numberOfRows && c < numberOfColumns) {
-    values.push(matrix[r][c]);
+    values.push({
+      value: matrix[r][c],
+      row: r,
+      column: c
+    });
 
     if (r === rowIndex && c === columnIndex) {
       currentIndex = i;
@@ -50,9 +58,9 @@ function getDownSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOf
     values,
     currentIndex
   };
-}
+};
 
-function getUpSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOfColumns) {
+export const getUpSlant = (matrix = [], rowIndex, columnIndex, numberOfRows, numberOfColumns) => {
   const firstRowIndex = rowIndex + columnIndex;
   const firstColumnIndex = columnIndex - ((numberOfRows - 1) - rowIndex);
   const values = [];
@@ -63,7 +71,11 @@ function getUpSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOfCo
     currentIndex = 0;
 
   while (r >= 0 && c < numberOfColumns) {
-    values.push(matrix[r][c]);
+    values.push({
+      value: matrix[r][c],
+      row: r,
+      column: c
+    });
 
     if (r === rowIndex && c === columnIndex) {
       currentIndex = i;
@@ -78,7 +90,70 @@ function getUpSlant(matrix = [], rowIndex, columnIndex, numberOfRows, numberOfCo
     values,
     currentIndex
   };
-}
+};
 
-console.log(getDownSlant(matrix, 4, 3, rows, columns));
-console.log(getUpSlant(matrix, 4, 3, rows, columns));
+export const PATH_FINDER_MAP = {
+  HORIZONTAL: getHorizontal,
+  VERTICAL: getVertical,
+  DOWN_SLANT: getDownSlant,
+  UP_SLANT: getUpSlant
+};
+
+export const getFlippableValuesFromPath = (matchValue = 0, path = [], currentIndex = 0) => {
+  const potentialBackValues = [];
+  const potentialForthValues = [];
+
+  let backValues = [];
+  let forthValues = [];
+
+  // Work backwards from index.
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const item = path[i];
+    const {value} = item;
+
+    if (value !== 0 && value !== matchValue) {
+      potentialBackValues.push(item);
+    } else {
+      if (value === matchValue) {
+        backValues = potentialBackValues;
+      }
+
+      break;
+    }
+  }
+
+  // Work forward from index.
+  for (let i = currentIndex + 1; i < path.length; i++) {
+    const item = path[i];
+    const {value} = item;
+
+    if (value !== 0 && value !== matchValue) {
+      potentialForthValues.push(item);
+    } else {
+      if (value === matchValue) {
+        backValues = potentialForthValues;
+      }
+
+      break;
+    }
+  }
+
+  return [
+    ...backValues,
+    ...forthValues
+  ];
+};
+
+export const getFlippableValuesFromMatrix = (matchValue = 0, rowIndex, columnIndex, matrix = [], numberOfRows, numberOfColumns) => {
+  const paths = Object
+    .keys(PATH_FINDER_MAP)
+    .map((k) => PATH_FINDER_MAP[k](matrix, rowIndex, columnIndex, numberOfRows, numberOfColumns));
+
+  return paths
+    .reduce((acc, {values = [], currentIndex = 0} = {}) => {
+      return [
+        ...acc,
+        getFlippableValuesFromPath(matchValue, values, currentIndex)
+      ];
+    }, []);
+};
