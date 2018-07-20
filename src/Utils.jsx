@@ -172,3 +172,22 @@ export const getMatrixValueList = (matrix = []) => {
       return acc;
     }, []);
 };
+
+export const getValueHasFlippableValues = (value = 1, matrix = [], numberOfRows, numberOfColumns) => {
+  const matrixValueList = getMatrixValueList(matrix);
+  const flippableValues = matrixValueList
+    .reduce((acc, valueItem = {}) => {
+      const {value: currentValue = 0, row = 0, column = 0} = valueItem;
+
+      if (currentValue === 0) {
+        return [
+          ...acc,
+          ...getFlippableValuesFromMatrix(value, row, column, matrix, numberOfRows, numberOfColumns)
+        ];
+      } else {
+        return acc;
+      }
+    }, []);
+
+  return flippableValues.length > 0;
+};
