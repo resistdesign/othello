@@ -210,3 +210,13 @@ export const getMatrixWithFlippedValues = (matrix = [], flipValues = [], toValue
 
   return newMatrix;
 };
+
+export const getValueCountInMatrix = (matrix = [], matchValue = 0) => {
+  return matrix
+    .reduce((acc, row = []) => {
+      return acc + row
+        .reduce((acc2, c) => {
+          return acc2 + (c === matchValue ? 1 : 0);
+        }, 0);
+    }, 0);
+};
