@@ -191,3 +191,22 @@ export const getValueHasFlippableValues = (value = 1, matrix = [], numberOfRows,
 
   return flippableValues.length > 0;
 };
+
+export const getMatrixWithFlippedValues = (matrix = [], flipValues = [], toValue = 1) => {
+  const newMatrix = matrix
+    .reduce((acc, row = []) => {
+      const newRow = row
+        .map(v => v);
+
+      acc.push(newRow);
+
+      return acc;
+    }, []);
+
+  flipValues
+    .forEach(({row = 0, column = 0} = {}) => {
+      newMatrix[row][column] = toValue;
+    });
+
+  return newMatrix;
+};
