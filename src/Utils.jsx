@@ -221,7 +221,7 @@ export const getValueCountInMatrix = (matrix = [], matchValue = 0) => {
     }, 0);
 };
 
-export const getNextPlayer = (players = [], currentPlayer) => {
+export const getNextPlayer = (players = [], currentPlayer, matrix = [], numberOfRows, numberOfColumns) => {
   const currentPlayerIndex = players.indexOf(currentPlayer);
   const nextPotentialPlayerIndex = currentPlayerIndex + 1;
   const nextPlayerIndex = nextPotentialPlayerIndex >= players.length ? 0 : nextPotentialPlayerIndex;
@@ -232,7 +232,7 @@ export const getNextPlayer = (players = [], currentPlayer) => {
     const player = players[i];
     const {value} = player;
 
-    if (getValueHasFlippableValues(value)) {
+    if (getValueHasFlippableValues(value, matrix, numberOfRows, numberOfColumns)) {
       nextPlayer = player;
       break;
     }
