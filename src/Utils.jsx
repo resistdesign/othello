@@ -220,3 +220,23 @@ export const getValueCountInMatrix = (matrix = [], matchValue = 0) => {
         }, 0);
     }, 0);
 };
+
+export const getNextPlayer = (players = [], currentPlayer) => {
+  const currentPlayerIndex = players.indexOf(currentPlayer);
+  const nextPotentialPlayerIndex = currentPlayerIndex + 1;
+  const nextPlayerIndex = nextPotentialPlayerIndex >= players.length ? 0 : nextPotentialPlayerIndex;
+
+  let nextPlayer;
+
+  for (let i = nextPlayerIndex; i < players.length; i++) {
+    const player = players[i];
+    const {value} = player;
+
+    if (getValueHasFlippableValues(value)) {
+      nextPlayer = player;
+      break;
+    }
+  }
+
+  return nextPlayer;
+};
