@@ -1,11 +1,13 @@
 import T from 'prop-types';
 import React, {PureComponent} from 'react';
 import Style from './GameBoard.less';
+import GameSpace from './GameSpace';
 
 const {GameBoard: ClassName} = Style;
 
 export default class GameBoard extends PureComponent {
   static propTypes = {
+    className: T.string,
     enabled: T.bool,
     matrix: T.arrayOf(
       T.arrayOf(
@@ -35,12 +37,53 @@ export default class GameBoard extends PureComponent {
     enabled: true
   };
 
+  onSpaceRollOver = (space) => {
+    const {onSpaceRollOver} = this.props;
+
+    if (onSpaceRollOver instanceof Function) {
+      onSpaceRollOver(space);
+    }
+  };
+
   render() {
+    const {
+      className = '',
+      matrix = [],
+      potentialValuesToFlip = []
+    } = this.props;
+    const potentialValuesToFlipStrings = potentialValuesToFlip
+      .map(({row = 0, column = 0} = {}) => `${row}:${column}`);
+
     return (
       <div
-        className={`GameBoard ${ClassName}`}
+        className={`GameBoard ${ClassName} ${className}`}
       >
+        {matrix
+          .map((row = [], r) => (
+            <div
+              key={`Row:${r}`}
+              className='Row'
+            >
+              {row
+                .map((value = 0, v) => {
+                  const spaceString = `${r}:${v}`;
+                  const isPotentialFlip = potentialValuesToFlipStrings.indexOf(spaceString) !== -1;
 
+                  return (
+                    <GameSpace
+                      key={`GameSpace:${v}`}
+                      className={`Space ${isPotentialFlip ? 'Highlighted' : ''}`}
+                      value={value}
+                      space={{
+                        row: r,
+                        column: v
+                      }}
+                      onRollOver={this.onSpaceRollOver}
+                    />
+                  );
+                })}
+            </div>
+          ))}
       </div>
     );
   }

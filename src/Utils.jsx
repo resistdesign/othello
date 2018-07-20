@@ -155,7 +155,7 @@ export const getFlippableValuesFromMatrix = (matchValue = 0, rowIndex, columnInd
     .reduce((acc, {values = [], currentIndex = 0} = {}) => {
       return [
         ...acc,
-        getFlippableValuesFromPath(matchValue, values, currentIndex)
+        ...getFlippableValuesFromPath(matchValue, values, currentIndex)
       ];
     }, []);
 };

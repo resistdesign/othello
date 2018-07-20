@@ -1,3 +1,19 @@
 :local(.GameBoard) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
 
+  & > .Row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: stretch;
+
+    & > .Space {
+      &.Highlighted {
+        border-color: red;
+      }
+    }
+  }
 }
