@@ -1,3 +1,5 @@
+import {GAME_STATES} from './Constants';
+
 export const getHorizontal = (matrix = [], rowIndex, columnIndex) => {
   return {
     values: matrix[rowIndex]
@@ -192,7 +194,7 @@ export const getValueHasFlippableValues = (value = 1, matrix = [], numberOfRows,
   return flippableValues.length > 0;
 };
 
-export const getMatrixWithFlippedValues = (matrix = [], flipValues = [], toValue = 1) => {
+export const getMatrixWithFlippedValues = (matrix = [], flippedValues = [], toValue = 1) => {
   const newMatrix = matrix
     .reduce((acc, row = []) => {
       const newRow = row
@@ -203,7 +205,7 @@ export const getMatrixWithFlippedValues = (matrix = [], flipValues = [], toValue
       return acc;
     }, []);
 
-  flipValues
+  flippedValues
     .forEach(({row = 0, column = 0} = {}) => {
       newMatrix[row][column] = toValue;
     });
@@ -239,4 +241,24 @@ export const getNextPlayer = (players = [], currentPlayer, matrix = [], numberOf
   }
 
   return nextPlayer;
+};
+
+export const getGameState = (players = [], currentPlayer, matrix, initialMatrix, numberOfRows, numberOfColumns) => {
+  if (matrix === initialMatrix) {
+    return GAME_STATES.NEW;
+  }
+
+  const openSpaces = getValueCountInMatrix(matrix, 0);
+
+  if (openSpaces === 0) {
+    return GAME_STATES.BOARD_FULL;
+  }
+
+  const nextPlayer = getNextPlayer(players, currentPlayer, matrix, numberOfRows, numberOfColumns);
+
+  if (typeof nextPlayer === 'undefined') {
+    return GAME_STATES.NO_MOVES;
+  }
+
+  return GAME_STATES.ACTIVE;
 };
