@@ -1,10 +1,16 @@
 import 'normalize.css';
+import '../Assets/Fonts/Hugtophia/stylesheet.css';
 import {hot} from 'react-hot-loader';
 import React, {Component} from 'react';
 import Style from './Othello.less';
 import {GAME_END_STATES, GAME_STATES} from './Constants';
 import GameBoard from './GameBoard';
-import {getFlippableValuesFromMatrix, getGameState, getMatrixWithFlippedValues, getNextPlayer} from './Utils';
+import {
+  getFlippableValuesFromMatrix,
+  getGameState,
+  getMatrixWithFlippedValues,
+  getNextPlayer
+} from './Utils';
 
 const {
   Othello: ClassName,
@@ -168,10 +174,14 @@ class Othello extends Component {
       <div
         className={`Othello ${ClassName}`}
       >
-        <h1>
+        <div
+          className='Title'
+        >
           Othello
-        </h1>
-        <div>
+        </div>
+        <div
+          className='Layout'
+        >
           <GameBoard
             enabled={enabled}
             matrix={matrix}

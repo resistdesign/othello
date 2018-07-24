@@ -1,5 +1,27 @@
 :local(.Othello) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
 
+  & > .Title {
+    font-family: hugtophiaregular, sans-serif;
+    font-size: 6em;
+    line-height: 1em;
+    color: #ff00ff;
+    width: 5em;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-top: 0.5em;
+  }
+  & > .Layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 :local(.PlayerPiece) {
