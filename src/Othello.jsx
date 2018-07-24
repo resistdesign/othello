@@ -148,7 +148,7 @@ class Othello extends Component {
         gameState: getGameState(
           PLAYER_LIST,
           currentPlayer,
-          matrix,
+          newMatrix,
           INITIAL_MATRIX,
           GAME_CONFIG.ROWS,
           GAME_CONFIG.COLUMNS
@@ -174,7 +174,9 @@ class Othello extends Component {
       ghostSpace
     } = this.state;
     const {value: currentPlayerValue} = currentPlayer;
-    const enabled = GAME_END_STATES.indexOf(gameState) === -1;
+    const gameOver = GAME_END_STATES.indexOf(gameState) !== -1;
+    const player1Score = scoreMap[PLAYERS.PLAYER_1.value];
+    const player2Score = scoreMap[PLAYERS.PLAYER_2.value];
 
     return (
       <div
@@ -190,14 +192,14 @@ class Othello extends Component {
         >
           <PlayerScore
             active={currentPlayerValue === PLAYERS.PLAYER_1.value}
-            score={scoreMap[PLAYERS.PLAYER_1.value]}
+            score={player1Score}
             playerName={PLAYERS.PLAYER_1.name}
+            winner={gameOver && (player1Score > player2Score)}
           />
           <div
-            className='GameBoard'
+            className={`GameBoard ${gameOver ? 'Disabled' : ''}`}
           >
             <GameBoard
-              enabled={enabled}
               matrix={matrix}
               potentialValuesToFlip={potentialValuesToFlip}
               ghostSpace={ghostSpace}
@@ -210,8 +212,9 @@ class Othello extends Component {
           </div>
           <PlayerScore
             active={currentPlayerValue === PLAYERS.PLAYER_2.value}
-            score={scoreMap[PLAYERS.PLAYER_2.value]}
+            score={player2Score}
             playerName={PLAYERS.PLAYER_2.name}
+            winner={gameOver && (player2Score > player1Score)}
           />
         </div>
       </div>

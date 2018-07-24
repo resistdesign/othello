@@ -8,20 +8,29 @@ export default class PlayerScore extends PureComponent {
   static propTypes = {
     active: T.bool,
     score: T.number,
-    playerName: T.string
+    playerName: T.string,
+    winner: T.bool
   };
 
   render() {
     const {
       active,
       score,
-      playerName
+      playerName,
+      winner
     } = this.props;
 
     return (
       <div
         className={`PlayerScore ${ClassName}`}
       >
+        {winner ? (
+          <div
+            className='Winner'
+          >
+            {winner ? 'You Win!' : ''}
+          </div>
+        ) : undefined}
         <div
           className='Score'
         >

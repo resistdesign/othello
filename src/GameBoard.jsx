@@ -7,8 +7,6 @@ const {GameBoard: ClassName} = Style;
 
 export default class GameBoard extends PureComponent {
   static propTypes = {
-    className: T.string,
-    enabled: T.bool,
     matrix: T.arrayOf(
       T.arrayOf(
         T.number
@@ -33,9 +31,6 @@ export default class GameBoard extends PureComponent {
     onSpaceClick: T.func,
     onRollOut: T.func
   };
-  static defaultProps = {
-    enabled: true
-  };
 
   onSpaceRollOver = (space) => {
     const {onSpaceRollOver} = this.props;
@@ -55,7 +50,6 @@ export default class GameBoard extends PureComponent {
 
   render() {
     const {
-      className = '',
       matrix = [],
       potentialValuesToFlip = [],
       playerValueComponentMap = {},
@@ -66,7 +60,7 @@ export default class GameBoard extends PureComponent {
 
     return (
       <div
-        className={`GameBoard ${ClassName} ${className}`}
+        className={`GameBoard ${ClassName}`}
       >
         {matrix
           .map((row = [], r) => (
