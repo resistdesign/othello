@@ -1,5 +1,5 @@
 import 'normalize.css';
-import '../Assets/Fonts/Hugtophia/stylesheet.css';
+import './Assets/Fonts/Hugtophia/stylesheet.css';
 import {hot} from 'react-hot-loader';
 import React, {Component} from 'react';
 import Style from './Othello.less';
