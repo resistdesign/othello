@@ -205,6 +205,11 @@ export const getMatrixWithFlippedValues = (matrix = [], flippedValues = [], toVa
       return acc;
     }, []);
 
+
+  if (!(flippedValues instanceof Array) || !flippedValues.length) {
+    return newMatrix;
+  }
+
   flippedValues
     .forEach(({row = 0, column = 0} = {}) => {
       newMatrix[row][column] = toValue;

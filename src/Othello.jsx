@@ -1,3 +1,4 @@
+import 'normalize.css';
 import {hot} from 'react-hot-loader';
 import React, {Component} from 'react';
 import Style from './Othello.less';
@@ -5,7 +6,12 @@ import {GAME_END_STATES, GAME_STATES} from './Constants';
 import GameBoard from './GameBoard';
 import {getFlippableValuesFromMatrix, getGameState, getMatrixWithFlippedValues, getNextPlayer} from './Utils';
 
-const {Othello: ClassName} = Style;
+const {
+  Othello: ClassName,
+  PlayerPiece,
+  Player_1,
+  Player_2
+} = Style;
 const PLAYERS = {
   PLAYER_1: {
     name: 'Player 1',
@@ -16,6 +22,9 @@ const PLAYERS = {
     value: 2
   }
 };
+const PLAYER_LIST = Object
+  .keys(PLAYERS)
+  .map(k => PLAYERS[k]);
 const GAME_CONFIG = {
   ROWS: 8,
   COLUMNS: 8
@@ -30,7 +39,22 @@ const INITIAL_MATRIX = [
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0]
 ];
-const PLAYER_VALUE_COMPONENT_MAP = {};
+const PLAYER_VALUE_COMPONENT_MAP = {
+  [PLAYERS.PLAYER_1.value]: (
+    <div
+      className={`${PlayerPiece} ${Player_1}`}
+    >
+
+    </div>
+  ),
+  [PLAYERS.PLAYER_2.value]: (
+    <div
+      className={`${PlayerPiece} ${Player_2}`}
+    >
+
+    </div>
+  )
+};
 
 class Othello extends Component {
   state = {
@@ -84,38 +108,41 @@ class Othello extends Component {
       GAME_CONFIG.ROWS,
       GAME_CONFIG.COLUMNS
     );
-    const newMatrix = getMatrixWithFlippedValues(
-      matrix,
-      [
-        ...flippedValues,
-        {
-          value: currentPlayerValue,
-          row,
-          column
-        }
-      ],
-      currentPlayerValue
-    );
 
-    this.setState({
-      scoreMap: {},
-      currentPlayer: getNextPlayer(
-        PLAYERS,
-        currentPlayer,
-        newMatrix,
-        GAME_CONFIG.ROWS,
-        GAME_CONFIG.COLUMNS
-      ),
-      matrix: newMatrix,
-      gameState: getGameState(
-        PLAYERS,
-        currentPlayer,
+    if (flippedValues instanceof Array && flippedValues.length) {
+      const newMatrix = getMatrixWithFlippedValues(
         matrix,
-        INITIAL_MATRIX,
-        GAME_CONFIG.ROWS,
-        GAME_CONFIG.COLUMNS
-      )
-    });
+        [
+          ...flippedValues,
+          {
+            value: currentPlayerValue,
+            row,
+            column
+          }
+        ],
+        currentPlayerValue
+      );
+
+      this.setState({
+        scoreMap: {},
+        currentPlayer: getNextPlayer(
+          PLAYER_LIST,
+          currentPlayer,
+          newMatrix,
+          GAME_CONFIG.ROWS,
+          GAME_CONFIG.COLUMNS
+        ),
+        matrix: newMatrix,
+        gameState: getGameState(
+          PLAYER_LIST,
+          currentPlayer,
+          matrix,
+          INITIAL_MATRIX,
+          GAME_CONFIG.ROWS,
+          GAME_CONFIG.COLUMNS
+        )
+      });
+    }
   };
 
   onRollGameBoardOut = () => {

@@ -45,11 +45,21 @@ export default class GameBoard extends PureComponent {
     }
   };
 
+  onSpaceClick = (space) => {
+    const {onSpaceClick} = this.props;
+
+    if (onSpaceClick instanceof Function) {
+      onSpaceClick(space);
+    }
+  };
+
   render() {
     const {
       className = '',
       matrix = [],
-      potentialValuesToFlip = []
+      potentialValuesToFlip = [],
+      playerValueComponentMap = {},
+      currentPlayerValue
     } = this.props;
     const potentialValuesToFlipStrings = potentialValuesToFlip
       .map(({row = 0, column = 0} = {}) => `${row}:${column}`);
@@ -74,11 +84,14 @@ export default class GameBoard extends PureComponent {
                       key={`GameSpace:${v}`}
                       className={`Space ${isPotentialFlip ? 'Highlighted' : ''}`}
                       value={value}
+                      currentPlayerValue={currentPlayerValue}
                       space={{
                         row: r,
                         column: v
                       }}
+                      playerValueComponentMap={playerValueComponentMap}
                       onRollOver={this.onSpaceRollOver}
+                      onClick={this.onSpaceClick}
                     />
                   );
                 })}

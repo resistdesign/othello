@@ -1,8 +1,12 @@
 :local(.GameBoard) {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch;
+
+  border: solid 0 #fecaff;
+  border-right-width: 0.05em;
+  border-bottom-width: 0.05em;
 
   & > .Row {
     display: flex;
@@ -12,7 +16,7 @@
 
     & > .Space {
       &.Highlighted {
-        border-color: red;
+        background-color: #a4ffc9;
       }
     }
   }
