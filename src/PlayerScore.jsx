@@ -28,7 +28,7 @@ export default class PlayerScore extends PureComponent {
           {score}
         </div>
         <div
-          className='PlayerName'
+          className={`PlayerName ${active ? 'Active' : ''}`}
         >
           {playerName}
         </div>

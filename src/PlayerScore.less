@@ -15,7 +15,15 @@
     font-size: 1.5em;
     color: #ffffff;
     background-color: #ff00ff;
-    padding: 0.25em 1em 0.25em 1em ;
+    padding: 0.25em 1em 0.25em 1em;
     border-radius: 1em;
+    border: solid 0 rgba(164, 255, 201, 0);
+
+    transition: all 0.75s ease-in-out;
+
+    &.Active {
+      border: solid 0.5em #a4ffc9;
+      border-radius: 3em;
+    }
   }
 }
