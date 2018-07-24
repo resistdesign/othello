@@ -9,8 +9,9 @@ import {
   getFlippableValuesFromMatrix,
   getGameState,
   getMatrixWithFlippedValues,
-  getNextPlayer
+  getNextPlayer, getValueCountInMatrix
 } from './Utils';
+import PlayerScore from './PlayerScore';
 
 const {
   Othello: ClassName,
@@ -130,7 +131,12 @@ class Othello extends Component {
       );
 
       this.setState({
-        scoreMap: {},
+        scoreMap: PLAYER_LIST
+          .reduce((acc, {value} = {}) => {
+            acc[value] = getValueCountInMatrix(newMatrix, value);
+
+            return acc;
+          }, {}),
         currentPlayer: getNextPlayer(
           PLAYER_LIST,
           currentPlayer,
@@ -182,16 +188,30 @@ class Othello extends Component {
         <div
           className='Layout'
         >
-          <GameBoard
-            enabled={enabled}
-            matrix={matrix}
-            potentialValuesToFlip={potentialValuesToFlip}
-            ghostSpace={ghostSpace}
-            currentPlayerValue={currentPlayerValue}
-            playerValueComponentMap={PLAYER_VALUE_COMPONENT_MAP}
-            onSpaceRollOver={this.onSpaceRollOver}
-            onSpaceClick={this.onSpaceClick}
-            onRollOut={this.onRollGameBoardOut}
+          <PlayerScore
+            active={currentPlayerValue === PLAYERS.PLAYER_1.value}
+            score={scoreMap[PLAYERS.PLAYER_1.value]}
+            playerName={PLAYERS.PLAYER_1.name}
+          />
+          <div
+            className='GameBoard'
+          >
+            <GameBoard
+              enabled={enabled}
+              matrix={matrix}
+              potentialValuesToFlip={potentialValuesToFlip}
+              ghostSpace={ghostSpace}
+              currentPlayerValue={currentPlayerValue}
+              playerValueComponentMap={PLAYER_VALUE_COMPONENT_MAP}
+              onSpaceRollOver={this.onSpaceRollOver}
+              onSpaceClick={this.onSpaceClick}
+              onRollOut={this.onRollGameBoardOut}
+            />
+          </div>
+          <PlayerScore
+            active={currentPlayerValue === PLAYERS.PLAYER_2.value}
+            score={scoreMap[PLAYERS.PLAYER_2.value]}
+            playerName={PLAYERS.PLAYER_2.name}
           />
         </div>
       </div>
