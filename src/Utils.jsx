@@ -150,6 +150,11 @@ export const getFlippableValuesFromMatrix = (matchValue = 0, rowIndex, columnInd
   const paths = Object
     .keys(PATH_FINDER_MAP)
     .map((k) => PATH_FINDER_MAP[k](matrix, rowIndex, columnIndex, numberOfRows, numberOfColumns));
+  const valueAtRowColumn = (matrix && matrix[rowIndex] && matrix[rowIndex][columnIndex]) || 0;
+
+  if (valueAtRowColumn !== 0) {
+    return [];
+  }
 
   return paths
     .reduce((acc, {values = [], currentIndex = 0} = {}) => {
