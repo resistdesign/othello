@@ -1,3 +1,29 @@
+.Disabled {
+  opacity: 0.25;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.Button {
+  font-family: hugtophiaregular, sans-serif;
+  font-size: 2em;
+  color: #ffffff;
+  background-color: #ff00ff;
+  border-radius: 1em;
+  padding: 0.25em 1em 0.25em 1em;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease-in-out;
+  transform-origin: 50% 50%;
+
+  &:hover {
+    background-color: #a4ffc9;
+    color: #ff00ff;
+    transform: rotate(-10deg);
+  }
+}
+
 :local(.Othello) {
   display: flex;
   flex-direction: column;
@@ -9,7 +35,7 @@
     font-size: 6em;
     line-height: 1em;
     color: #ff00ff;
-    width: 5em;
+    width: 4em;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
@@ -24,12 +50,49 @@
 
     & > .GameBoard {
       margin: 0 2em 0 2em;
+    }
+  }
 
-      &.Disabled {
-        opacity: 0.25;
-        pointer-events: none;
+  & > .NewGameMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2em;
+    padding: 1em 2em 1em 2em;
+
+    border: solid 0.15em #fecaff;
+    border-radius: 1em;
+
+    transition: all 0.25s ease-in-out;
+
+    & > .Message {
+      font-family: sans-serif;
+      font-size: 2em;
+    }
+
+    & > .Answers {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+
+      margin: 1em;
+      margin-bottom: 0;
+
+      & > .Button {
+        margin-left: 0.5em;
       }
     }
+  }
+
+  & > .Controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 2em;
   }
 }
 

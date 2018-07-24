@@ -62,23 +62,45 @@ const PLAYER_VALUE_COMPONENT_MAP = {
     </div>
   )
 };
+const INITIAL_STATE = {
+  confirmStartNewGame: false,
+  scoreMap: Object
+    .keys(PLAYERS)
+    .reduce((acc, k) => {
+      const {value} = PLAYERS[k];
+
+      acc[value] = 0;
+
+      return acc;
+    }, {}),
+  currentPlayer: PLAYERS.PLAYER_1,
+  matrix: INITIAL_MATRIX,
+  gameState: GAME_STATES.NEW,
+  potentialValuesToFlip: [],
+  ghostSpace: undefined
+};
 
 class Othello extends Component {
   state = {
-    scoreMap: Object
-      .keys(PLAYERS)
-      .reduce((acc, k) => {
-        const {value} = PLAYERS[k];
+    ...INITIAL_STATE
+  };
 
-        acc[value] = 0;
+  onRequestNewGame = () => {
+    this.setState({
+      confirmStartNewGame: true
+    });
+  };
 
-        return acc;
-      }, {}),
-    currentPlayer: PLAYERS.PLAYER_1,
-    matrix: INITIAL_MATRIX,
-    gameState: GAME_STATES.NEW,
-    potentialValuesToFlip: [],
-    ghostSpace: undefined
+  onStartNewGame = () => {
+    this.setState({
+      ...INITIAL_STATE
+    });
+  };
+
+  onCancelNewGame = () => {
+    this.setState({
+      confirmStartNewGame: false
+    });
   };
 
   onSpaceRollOver = (ghostSpace = {}) => {
@@ -166,6 +188,7 @@ class Othello extends Component {
 
   render() {
     const {
+      confirmStartNewGame,
       scoreMap = {},
       currentPlayer = {},
       matrix = [],
@@ -217,6 +240,44 @@ class Othello extends Component {
             winner={gameOver && (player2Score > player1Score)}
           />
         </div>
+        {confirmStartNewGame ? (
+          <div
+            className='NewGameMessage'
+          >
+            <div
+              className='Message'
+            >
+              Are you sure you want to start a new game?
+            </div>
+            <div
+              className='Answers'
+            >
+              <div
+                className='Button'
+                onClick={this.onStartNewGame}
+              >
+                Yes!
+              </div>
+              <div
+                className='Button'
+                onClick={this.onCancelNewGame}
+              >
+                No
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div
+            className='Controls'
+          >
+            <div
+              className={`Button ${gameState === GAME_STATES.NEW ? 'Disabled' : ''}`}
+              onClick={this.onRequestNewGame}
+            >
+              New Game
+            </div>
+          </div>
+        )}
       </div>
     );
   }
