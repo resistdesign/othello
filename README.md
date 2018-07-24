@@ -2,7 +2,7 @@
 
 # Demo
 
-https://resistdesign.github.io/othello
+http://othello.resist.design
 
 ## Build/Dev
 
